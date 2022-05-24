@@ -27,10 +27,7 @@
 variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
-trigger:
-  branches:
-    include:
-    - refs/heads/main
+trigger: none
 name: $(date:yyyyMMdd)$(rev:.r)
 jobs:
 - job: Job_1
