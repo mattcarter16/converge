@@ -30,7 +30,10 @@ const LOAD_MORE_UPCOMING_RESERVATIONS = "LOAD_MORE_UPCOMING_RESERVATIONS";
 export type PlaceAttributeKeys = "audioDeviceName" |
   "displayDeviceName" |
   "videoDeviceName" |
-  "isWheelChairAccessible";
+  "isWheelChairAccessible" |
+  "fullyEnclosed" |
+  "surfaceHub" |
+  "whiteboardCamera";
 
 interface UpdateLocationAction {
   type: typeof UPDATE_LOCATION;

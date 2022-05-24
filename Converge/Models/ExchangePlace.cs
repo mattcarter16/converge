@@ -29,6 +29,9 @@ namespace Converge.Models
         public string VideoDeviceName { get; set; }
         public string DisplayDeviceName { get; set; }
         public bool? IsWheelChairAccessible { get; set; }
+        public bool? FullyEnclosed { get; set; }
+        public bool? SurfaceHub { get; set; }
+        public bool? WhiteboardCamera { get; set; }
         public string Floor { get; set; }
         public string FloorLabel { get; set; }
         public List<string> Tags { get; set; }

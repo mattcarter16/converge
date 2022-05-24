@@ -21,6 +21,9 @@ interface IGetBuildingPlacesRequestParams {
   hasDisplay?: boolean;
   isAccessbile?: boolean;
   displayNameSearchString?: string;
+  fullyEnclosed?: boolean;
+  surfaceHub?: boolean;
+  whiteboardCamera?: boolean;
 }
 
 interface PlaceDetailsQueryParams {

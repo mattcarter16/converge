@@ -80,6 +80,9 @@ namespace Converge.Controllers
         /// <param name="hasAudio">Whether to return places with an audio device.</param>
         /// <param name="hasDisplay">Whether to return places with a display device.</param>
         /// <param name="isWheelchairAccessible">Whether to return places that are wheelchair accessible.</param>
+        /// <param name="fullyEnclosed">Whether to return places that are fully enclosed</param>
+        /// <param name="surfaceHub">Whether to return places with a surface hub</param>
+        /// <param name="whiteboardCamera">Whether to return places with a whiteboard camera</param>
         /// <returns>ExchangePlacesResponse: Containing the Conference-rooms list and reference to Link-to-next-page.</returns>
         [HttpGet]
         [Route("{buildingUpn}/rooms")]
@@ -89,7 +92,10 @@ namespace Converge.Controllers
                                                                                                 bool hasVideo = false,
                                                                                                 bool hasAudio = false,
                                                                                                 bool hasDisplay = false,
-                                                                                                bool isWheelchairAccessible = false)
+                                                                                                bool isWheelchairAccessible = false,
+                                                                                                bool fullyEnclosed  = false,
+                                                                                                bool surfaceHub = false,
+                                                                                                bool whiteboardCamera = false)
         {
             ListItemFilterOptions listItemFilterOptions = new ListItemFilterOptions
             {
@@ -97,6 +103,9 @@ namespace Converge.Controllers
                 HasVideo = hasVideo,
                 HasDisplay = hasDisplay,
                 IsWheelChairAccessible = isWheelchairAccessible,
+                FullyEnclosed = fullyEnclosed,
+                SurfaceHub = surfaceHub,
+                WhiteboardCamera = whiteboardCamera,
             };
             var result = await buildingsService.GetPlacesOfBuilding(buildingUpn, PlaceType.Room, topCount, skipToken, listItemFilterOptions);
             return Ok(result);
@@ -109,11 +118,14 @@ namespace Converge.Controllers
         /// <param name="buildingUpn">UPN of Building.</param>
         /// <param name="topCount">Number of records after the skipCount used to skip the number of records.</param>
         /// <param name="skipToken">Skip-token option as string to get next set of records.</param>
-        /// <param name="hasVideo">Whether to return places with a video display device.</param>
-        /// <param name="hasAudio">Whether to return places with an audio device.</param>
-        /// <param name="hasDisplay">Whether to return places with a display device.</param>
-        /// <param name="isWheelchairAccessible">Whether to return places that are wheelchair accessible.</param>
-        /// <param name="displayNameSearchString">Search string to search places by display name</param>
+        /// <param name="hasVideo">Whether to return spaces with a video display device.</param>
+        /// <param name="hasAudio">Whether to return spaces with an audio device.</param>
+        /// <param name="hasDisplay">Whether to return spaces with a display device.</param>
+        /// <param name="isWheelchairAccessible">Whether to return spaces that are wheelchair accessible.</param>
+        /// <param name="displayNameSearchString">Search string to search spaces by display name</param>
+        /// <param name="fullyEnclosed">Whether to return spaces that are fully enclosed</param>
+        /// <param name="surfaceHub">Whether to return spaces with a surface hub</param>
+        /// <param name="whiteboardCamera">Whether to return spaces with a whiteboard camera</param>
         /// <returns>ExchangePlacesResponse: Containing the Workspaces list and reference to Link-to-next-page.</returns>
         [HttpGet]
         [Route("{buildingUpn}/spaces")]
@@ -124,7 +136,10 @@ namespace Converge.Controllers
                                                                                             bool hasAudio = false,
                                                                                             bool hasDisplay = false,
                                                                                             bool isWheelchairAccessible = false,
-                                                                                            string displayNameSearchString = null)
+                                                                                            string displayNameSearchString = null,
+                                                                                            bool fullyEnclosed  = false,
+                                                                                            bool surfaceHub = false,
+                                                                                            bool whiteboardCamera = false)
         {
             ListItemFilterOptions listItemFilterOptions = new ListItemFilterOptions
             {
@@ -133,6 +148,9 @@ namespace Converge.Controllers
                 HasDisplay = hasDisplay,
                 IsWheelChairAccessible = isWheelchairAccessible,
                 DisplayNameSearchString = displayNameSearchString,
+                FullyEnclosed = fullyEnclosed,
+                SurfaceHub = surfaceHub,
+                WhiteboardCamera = whiteboardCamera,
             };
             var result = await buildingsService.GetPlacesOfBuilding(buildingUpn, PlaceType.Space, topCount, skipToken, listItemFilterOptions);
             return Ok(result);

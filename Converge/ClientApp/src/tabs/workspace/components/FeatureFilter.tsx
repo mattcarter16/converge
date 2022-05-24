@@ -93,6 +93,9 @@ const FeatureFilter: React.FC = () => {
     { key: "displayDeviceName", text: "Display" },
     { key: "videoDeviceName", text: "Video" },
     { key: "isWheelChairAccessible", text: "Accessible" },
+    { key: "fullyEnclosed", text: "Fully Enclosed" },
+    { key: "surfaceHub", text: "Surface Hub" },
+    { key: "whiteboardCamera", text: "Whiteboard Camera" },
   ];
 
   const onChange = (event: React.FormEvent<HTMLDivElement>,
@@ -105,7 +108,7 @@ const FeatureFilter: React.FC = () => {
       return;
     }
     let attributeFilter: PlaceAttributeKeys[] = [];
-    if (["audioDeviceName", "displayDeviceName", "videoDeviceName", "isWheelChairAccessible"]
+    if (["audioDeviceName", "displayDeviceName", "videoDeviceName", "isWheelChairAccessible", "fullyEnclosed", "display", "surfaceHub", "whiteboardCamera"]
       .indexOf(option.key as string) > -1) {
       attributeFilter = option.selected
         ? [...state.attributeFilter, option.key as PlaceAttributeKeys]
@@ -114,6 +117,7 @@ const FeatureFilter: React.FC = () => {
       attributeFilter = [];
     }
     updateAttributeFilter(attributeFilter);
+    console.log(attributeFilter);
     setSelectedKeysCount(attributeFilter.length);
   };
 

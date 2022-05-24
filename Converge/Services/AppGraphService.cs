@@ -621,6 +621,21 @@ namespace Converge.Services
                 {
                     predicateBuilder.Append($" and startsWith(fields/Name,'{listItemFilterOptions.DisplayNameSearchString}')");
                 }
+
+                if (listItemFilterOptions.FullyEnclosed)
+                {
+                    predicateBuilder.Append("and (fields/FullyEnclosed ne null)");
+                }
+
+                if (listItemFilterOptions.SurfaceHub)
+                {
+                    predicateBuilder.Append("and (fields/SurfaceHub ne null)");
+                }
+
+                if (listItemFilterOptions.WhiteboardCamera)
+                {
+                    predicateBuilder.Append("and (fields/WhiteboardCamera ne null)");
+                }
             }
 
             IListItemsCollectionRequest listItemsCollRequest = BuildListItemsCollectionRequest(siteId, placesList.Id, predicateBuilder.ToString(), topCount, skipToken);

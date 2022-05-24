@@ -36,16 +36,20 @@ const CustomizedPlaceCollectionAccordian: React.FC<Props> = (props) => {
     requestBuildingPlaces,
     hasMore,
   } = useBuildingPlaces(buildingService, closestBuilding.identity);
+  const [count, setCount] = React.useState(4);
 
   useEffect(() => {
     requestBuildingPlaces(
       state.place,
-      4,
+      count,
       {
         isWheelchairAccessible: state.attributeFilter.indexOf("isWheelChairAccessible") > -1,
         hasAudio: state.attributeFilter.indexOf("audioDeviceName") > -1,
         hasDisplay: state.attributeFilter.indexOf("displayDeviceName") > -1,
         hasVideo: state.attributeFilter.indexOf("videoDeviceName") > -1,
+        fullyEnclosed: state.attributeFilter.indexOf("fullyEnclosed") > -1,
+        surfaceHub: state.attributeFilter.indexOf("surfaceHub") > -1,
+        whiteboardCamera: state.attributeFilter.indexOf("whiteboardCamera") > -1,
       },
       null,
       true,
@@ -56,6 +60,7 @@ const CustomizedPlaceCollectionAccordian: React.FC<Props> = (props) => {
     closestBuilding.identity,
     state.place,
     state.attributeFilter,
+    state.location,
   ]);
 
   const handleCustomizedAccordionChange = () => {
@@ -78,6 +83,9 @@ const CustomizedPlaceCollectionAccordian: React.FC<Props> = (props) => {
         hasAudio: state.attributeFilter.indexOf("audioDeviceName") > -1,
         hasDisplay: state.attributeFilter.indexOf("displayDeviceName") > -1,
         hasVideo: state.attributeFilter.indexOf("videoDeviceName") > -1,
+        fullyEnclosed: state.attributeFilter.indexOf("fullyEnclosed") > -1,
+        surfaceHub: state.attributeFilter.indexOf("surfaceHub") > -1,
+        whiteboardCamera: state.attributeFilter.indexOf("whiteboardCamera") > -1,
       },
       null,
       true,
@@ -115,6 +123,7 @@ const CustomizedPlaceCollectionAccordian: React.FC<Props> = (props) => {
                   content={`See more (${favoriteCampuses.filter((b) => b.type === state.place).length - 3})`}
                   onClick={() => {
                     updateLocation("Favorites");
+                    setCount(10);
                     logEvent(USER_INTERACTION, [
                       { name: UI_SECTION, value: UISections.PlaceResults },
                       { name: DESCRIPTION, value: "see_more_favorites" },
@@ -183,6 +192,7 @@ const CustomizedPlaceCollectionAccordian: React.FC<Props> = (props) => {
                 content="See more"
                 onClick={() => {
                   updateLocation(closestBuilding.identity);
+                  setCount(10);
                   logEvent(USER_INTERACTION, [
                     { name: UI_SECTION, value: UISections.PlaceResults },
                     { name: DESCRIPTION, value: `see_more_buildings_${closestBuilding.displayName}` },

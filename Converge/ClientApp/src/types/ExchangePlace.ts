@@ -59,6 +59,9 @@ interface ExchangePlace {
   videoDeviceName: string;
   displayDeviceName: string;
   isWheelChairAccessible?: boolean;
+  fullyEnclosed?: boolean;
+  surfaceHub?: boolean;
+  whiteboardCamera?: boolean;
   floor: string;
   tags: string[];
   locality: string;

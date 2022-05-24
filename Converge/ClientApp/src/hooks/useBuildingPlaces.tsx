@@ -12,6 +12,9 @@ interface BuildingPlacesFilterOptions {
   hasVideo?: boolean,
   hasDisplay?: boolean,
   isWheelchairAccessible?: boolean,
+  fullyEnclosed?: boolean,
+  surfaceHub?: boolean,
+  whiteboardCamera?: boolean,
 }
 
 interface IUseBuildingWorkspacesHookReturnType {
@@ -86,6 +89,8 @@ function useBuildingPlaces(
       ...(placesResult?.exchangePlacesList ?? []),
     ]);
   }, [placesResult]);
+
+  console.log("hook: ", places);
 
   return {
     placesLoading,

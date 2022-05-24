@@ -339,7 +339,10 @@ const BookPlaceModal: React.FC<Props> = (props) => {
                   || place.audioDeviceName
                   || place.displayDeviceName
                   || place.videoDeviceName
-                  || place.isWheelChairAccessible),
+                  || place.isWheelChairAccessible
+                  || place.fullyEnclosed
+                  || place.surfaceHub
+                  || place.whiteboardCamera),
                 <Box className={classes.amenitiesBox}>
                   <span className={classes.amenities}>
                     {isWorkspace ? "Workspace" : "Meeting room"}

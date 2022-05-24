@@ -222,7 +222,10 @@ const CampusPlacePanel: React.FC<Props> = (props) => {
           || place.audioDeviceName
           || place.displayDeviceName
           || place.videoDeviceName
-          || place.isWheelChairAccessible)
+          || place.isWheelChairAccessible
+          || place.fullyEnclosed
+          || place.surfaceHub
+          || place.whiteboardCamera)
           && (
           <>
             <Text weight="bold" size="small" content="Ammenities and more" className={classes.ammenitiesTitle} />
