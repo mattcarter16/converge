@@ -82,6 +82,8 @@ namespace Converge.Services
         /// <returns></returns>
         public List<ListItem> GetSharePointPlacesToUpdate(List<GraphPlace> graphPlaces, List<ExchangePlace> sharePointPlaces)
         {
+            telemetryService.TrackEvent("PlaceSync: GetSharePointPlacesToUpdate", "graphPlaces", graphPlaces);
+            telemetryService.TrackEvent("PlaceSync: GetSharePointPlacesToUpdate", "sharePointPlaces", sharePointPlaces);
             List<ListItem> result = new List<ListItem>();
 
             if (graphPlaces.Count == 0)
@@ -116,6 +118,8 @@ namespace Converge.Services
                     }
                 }
             }
+            
+            telemetryService.TrackEvent("PlaceSync: GetSharePointPlacesToUpdate", "result", result);
 
             return result;
         }
@@ -129,6 +133,9 @@ namespace Converge.Services
         /// <returns></returns>
         private bool SyncGraphExchangePlace(GraphPlace graphPlace, ExchangePlace exchangePlace, out ListItem updatedPlace)
         {
+            telemetryService.TrackEvent("PlaceSync: SyncGraphExchangePlace", "graphPlace", graphPlace);
+            telemetryService.TrackEvent("PlaceSync: SyncGraphExchangePlace", "exchangePlace", exchangePlace);
+            
             IDictionary<string, object> additionalData = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(graphPlace.EmailAddress) && !graphPlace.EmailAddress.SameAs(exchangePlace.Identity))
             {
@@ -265,6 +272,7 @@ namespace Converge.Services
                     }
                 }
             }
+
             updatedPlace = new ListItem { 
                 Id = exchangePlace.SharePointID,
                 Fields = new FieldValueSet
