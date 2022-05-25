@@ -65,6 +65,7 @@ namespace Converge.Services
 
                     }
                 }
+                telemetryService.TrackEvent("PlaceSync: GetAllRoomLists", "allGraphPlaces", allGraphPlaces);
                 return allGraphPlaces;
             } 
             catch (Exception e)
@@ -272,6 +273,8 @@ namespace Converge.Services
                     }
                 }
             }
+
+            telemetryService.TrackEvent("Place Sync: Additional Data", "additionalData", additionalData);
 
             updatedPlace = new ListItem { 
                 Id = exchangePlace.SharePointID,
