@@ -21,7 +21,7 @@ namespace Converge.Models
         /// Gets or sets the nickname of the place. May be null.
         /// </summary>
         public virtual string Nickname { get; set; }
-
+        public virtual object AdditionalData1 { get; set; }
         /// <summary>
         /// Gets or sets the email address of the place.
         /// </summary>
@@ -104,7 +104,8 @@ namespace Converge.Models
             Address = place.Address;
             DisplayName = place.DisplayName;
             GeoCoordinates = place.GeoCoordinates;
-            Phone = place.Phone;
+            Phone = place.Phone; 
+            AdditionalData1 = place.AdditionalData;
             Nickname = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "nickname");
             EmailAddress = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "emailAddress");
             Building = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "building");
