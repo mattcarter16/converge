@@ -633,7 +633,9 @@ namespace Converge.Services
                     ContentType = BodyType.Html,
                     Content = calendarEventRequest.Body
                 },
-                ResponseRequested = true
+                ResponseRequested = true,
+                IsOnlineMeeting = true,
+                OnlineMeetingProvider = OnlineMeetingProviderType.TeamsForBusiness
             };
 
             var eventResponse = await graphServiceClient.Me.Events.Request().AddAsync(eventRequest);
