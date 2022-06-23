@@ -15,7 +15,7 @@ import {
 import { logEvent } from "./LogWrapper";
 
 interface Props {
-  headerTitle: string,
+  headerTitle?: string,
   locationBuildingName: string | undefined,
   otherOptionsList: string[];
   buildingList: ShorthandCollection<DropdownItemProps, Record<string, unknown>>,
@@ -118,7 +118,7 @@ const PopupMenuWrapper: React.FunctionComponent<Props> = (props) => {
         },
         content: (
           <PopupMenuContent
-            headerTitle={headerTitle}
+            // headerTitle={headerTitle}
             buildingList={buildingList}
             handleDropdownChange={handleDropdownChange}
             locationBuildingName={locationBuildingName}
