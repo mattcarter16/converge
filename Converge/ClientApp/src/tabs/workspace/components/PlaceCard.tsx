@@ -117,243 +117,242 @@ const PlaceCard: React.FC<Props> = (props) => {
 
   return (
     <>
-      {/* {(!isWorkspace && isAvailable) || isWorkspace
-    ? ( */}
-      <>
-        <Box
-          className={classes.lightCard}
-          key={place.identity}
-        >
-          <Box>
-            {
-              !photoUrl
-                ? <ImagePlaceholder width="100%" height="123px" borderRadius="5px 5px 0 0" fluid />
-                : (
-                  <Box className={classes.imgWrapper}>
-                    <Image
-                      className={classes.imageContainer}
-                      fluid
-                      src={photoUrl}
-                    />
-                  </Box>
-                )
-            }
-          </Box>
-          <Flex space="between" gap="gap.small" padding="padding.medium" vAlign="start" hAlign="center">
-            <Flex
-              column
-              className={classes.detailsWrapper}
-            >
-              <Box
-                className={classes.displayName}
-                title={place.displayName}
-              >
-                {place.displayName}
-              </Box>
-              <Flex className={classes.lightTheme} styles={{ fontSize: "12px" }} gap="gap.smaller">
-                <span className={classes.buildingName} title={buildingName}>
-                  {buildingName}
-                </span>
-                {place.floor
-                  && (
-                    <>
-                      <span>|</span>
-                      <span>
-                        Floor
-                        {" "}
-                        {place.floor}
-                      </span>
-                    </>
-                  )}
-                {!isWorkspace
-                  && (
-                    <>
-                      <span>|</span>
-                      <Icon iconName="contact" />
-                      <span>{place.capacity}</span>
-                    </>
-                  )}
-              </Flex>
-            </Flex>
+      {(!isWorkspace && isAvailable) || isWorkspace ? (
+        <>
+          <Box
+            className={classes.lightCard}
+            key={place.identity}
+          >
             <Box>
-              <Provider
-                theme={{
-                  componentVariables: {
-                    Dialog: ({ colorScheme }: SiteVariablesPrepared) => ({
-                      rootWidth: "795px",
-                      headerFontSize: "18px",
-                      rootBackground: colorScheme.default.background,
-                      color: colorScheme.default.background3,
-                    }),
-                  },
-                }}
+              {
+                !photoUrl
+                  ? <ImagePlaceholder width="100%" height="123px" borderRadius="5px 5px 0 0" fluid />
+                  : (
+                    <Box className={classes.imgWrapper}>
+                      <Image
+                        className={classes.imageContainer}
+                        fluid
+                        src={photoUrl}
+                      />
+                    </Box>
+                  )
+              }
+            </Box>
+            <Flex space="between" gap="gap.small" padding="padding.medium" vAlign="start" hAlign="center">
+              <Flex
+                column
+                className={classes.detailsWrapper}
               >
-                <>
-                  <Dialog
-                    open={open}
-                    onOpen={() => {
-                      logEvent(USER_INTERACTION, [
-                        { name: UI_SECTION, value: UISections.BookPlaceModal },
-                        { name: DESCRIPTION, value: "open_modal" },
-                      ]);
-                      setOpen(true);
-                    }}
-                    onCancel={() => {
-                      logEvent(USER_INTERACTION, [
-                        { name: UI_SECTION, value: UISections.BookPlaceModal },
-                        { name: DESCRIPTION, value: "cancel_modal" },
-                      ]);
-                      clearPlaceCard();
-                      setOpen(false);
-                    }}
-                    onConfirm={() => {
-                      logEvent(USER_INTERACTION, [
-                        { name: UI_SECTION, value: UISections.BookPlaceModal },
-                        { name: DESCRIPTION, value: "confirm_modal" },
-                      ]);
-                      if (place.type === PlaceType.Room) {
-                        setOpen(false);
-                        setNewEventDialogOpen(true);
-                      }
-                      if (place.type === PlaceType.Space) {
-                        setLoading(true);
-                        let startDate = start.utc().toDate();
-                        let endDate = end.utc().toDate();
-                        if (isAllDay) {
-                          startDate = dayjs(start.format("YYYY-MM-DD")).toDate();
-                          endDate = dayjs(end.add(1, "day").format("YYYY-MM-DD")).toDate();
-                        }
-                        calendarService.createEvent({
-                          isAllDay,
-                          start: startDate,
-                          end: endDate,
-                          attendees: [{
-                            emailAddress: place.identity,
-                            type: "resource" as MicrosoftGraph.AttendeeType,
-                          }],
-                          location: {
-                            displayName: place.displayName,
-                            locationEmailAddress: place.identity,
-                            locationType: "conferenceRoom",
-                          },
-                          title: "Converge Workspace Booking",
-                          showAs: "free" as MicrosoftGraph.FreeBusyStatus,
-                        })
-                          .then((calendarEvent) => {
-                            const newSettings = {
-                              ...convergeSettings,
-                              recentBuildingUpns: AddRecentBuildings(
-                                convergeSettings?.recentBuildingUpns,
-                                place.locality,
-                              ),
-                            };
-                            setConvergeSettings(newSettings);
-                            createReservation(calendarEvent);
-                            return meService.updateMyPredictedLocation({
-                              year: dayjs.utc(startDate).year(),
-                              month: dayjs.utc(startDate).month() + 1,
-                              day: dayjs.utc(startDate).date(),
-                              userPredictedLocation: {
-                                campusUpn: place.locality,
-                              },
-                            });
-                          })
-                          .then(() => {
-                            clearPlaceCard();
-                            setOpen(false);
-                            getAvailability();
-                            loadUpcomingReservations(
-                              state.upcomingReservationsStartDate,
-                              state.upcomingReservationsEndDate,
-                            );
-                            Notifications.show({
-                              duration: 5000,
-                              title: "You reserved a workspace.",
-                              content: `${place?.displayName} (${dayjs(startDate).format("ddd @ h:mm A")})`,
-                            });
-                          })
-                          .catch(() => {
-                            setErr("Something went wrong with your workspace reservation. Please try again.");
-                          })
-                          .finally(() => {
-                            setLoading(false);
-                          });
-                      }
-                    }}
-                    confirmButton={{
-                      content: isWorkspace ? "Reserve" : "Create event",
-                      disabled: !bookable,
-                      loading,
-                    }}
-                    cancelButton="Cancel"
-                    content={(
-                      <BookPlaceModal
-                        place={place}
-                        bookable={bookable}
-                        setBookable={setBookable}
-                        buildingName={buildingName}
-                        err={err}
-                        start={start}
-                        end={end}
-                        setStart={setStart}
-                        setEnd={setEnd}
-                        isAllDay={isAllDay}
-                        setIsAllDay={setIsAllDay}
-                        isFlexible={isFlexibleSeating}
-                      />
+                <Box
+                  className={classes.displayName}
+                  title={place.displayName}
+                >
+                  {place.displayName}
+                </Box>
+                <Flex className={classes.lightTheme} styles={{ fontSize: "12px" }} gap="gap.smaller">
+                  <span className={classes.buildingName} title={buildingName}>
+                    {buildingName}
+                  </span>
+                  {place.floor
+                    && (
+                      <>
+                        <span>|</span>
+                        <span>
+                          Floor
+                          {" "}
+                          {place.floor}
+                        </span>
+                      </>
                     )}
-                    header={(
-                      <Text
-                        as="h2"
-                        content={`Book a ${isWorkspace ? "workspace" : "meeting room"}`}
-                        styles={{ fontSize: "18px", color: "#252525", fontWeight: "normal" }}
-                        className={classes.lightTheme}
-                      />
+                  {!isWorkspace
+                    && (
+                      <>
+                        <span>|</span>
+                        <Icon iconName="contact" />
+                        <span>{place.capacity}</span>
+                      </>
                     )}
-                    headerAction={{
-                      icon: <CloseIcon />,
-                      title: "Close",
-                      onClick: () => {
-                        clearPlaceCard();
+                </Flex>
+              </Flex>
+              <Box>
+                <Provider
+                  theme={{
+                    componentVariables: {
+                      Dialog: ({ colorScheme }: SiteVariablesPrepared) => ({
+                        rootWidth: "795px",
+                        headerFontSize: "18px",
+                        rootBackground: colorScheme.default.background,
+                        color: colorScheme.default.background3,
+                      }),
+                    },
+                  }}
+                >
+                  <>
+                    <Dialog
+                      open={open}
+                      onOpen={() => {
                         logEvent(USER_INTERACTION, [
                           { name: UI_SECTION, value: UISections.BookPlaceModal },
-                          { name: DESCRIPTION, value: "close_modal" },
+                          { name: DESCRIPTION, value: "open_modal" },
                         ]);
+                        setOpen(true);
+                      }}
+                      onCancel={() => {
+                        logEvent(USER_INTERACTION, [
+                          { name: UI_SECTION, value: UISections.BookPlaceModal },
+                          { name: DESCRIPTION, value: "cancel_modal" },
+                        ]);
+                        clearPlaceCard();
                         setOpen(false);
-                      },
-                    }}
-                    trigger={(
-                      <Button
-                        className={classes.triggerBtn}
-                        loading={availabilityLoading}
-                        content={(
-                          <>
-                            {!availabilityLoading && isWorkspace && `${availability} available`}
-                            {(!availabilityLoading && !isWorkspace) && `${!isAvailable ? "Unavailable" : "Available"}`}
-                          </>
-                        )}
-                      />
-                    )}
-                    className={classes.dialog}
-                  />
-                  <NewConfRoomEvent
-                    open={newEventDialogOpen}
-                    setOpen={setNewEventDialogOpen}
-                    place={place}
-                    start={start}
-                    end={end}
-                    setStart={setStart}
-                    setEnd={setEnd}
-                    clearPlaceCard={clearPlaceCard}
-                    getAvailability={getAvailability}
-                  />
-                </>
-              </Provider>
-            </Box>
-          </Flex>
-        </Box>
-      </>
-      {/* ) : null} */}
+                      }}
+                      onConfirm={() => {
+                        logEvent(USER_INTERACTION, [
+                          { name: UI_SECTION, value: UISections.BookPlaceModal },
+                          { name: DESCRIPTION, value: "confirm_modal" },
+                        ]);
+                        if (place.type === PlaceType.Room) {
+                          setOpen(false);
+                          setNewEventDialogOpen(true);
+                        }
+                        if (place.type === PlaceType.Space) {
+                          setLoading(true);
+                          let startDate = start.utc().toDate();
+                          let endDate = end.utc().toDate();
+                          if (isAllDay) {
+                            startDate = dayjs(start.format("YYYY-MM-DD")).toDate();
+                            endDate = dayjs(end.add(1, "day").format("YYYY-MM-DD")).toDate();
+                          }
+                          calendarService.createEvent({
+                            isAllDay,
+                            start: startDate,
+                            end: endDate,
+                            attendees: [{
+                              emailAddress: place.identity,
+                              type: "resource" as MicrosoftGraph.AttendeeType,
+                            }],
+                            location: {
+                              displayName: place.displayName,
+                              locationEmailAddress: place.identity,
+                              locationType: "conferenceRoom",
+                            },
+                            title: "Converge Workspace Booking",
+                            showAs: "free" as MicrosoftGraph.FreeBusyStatus,
+                          })
+                            .then((calendarEvent) => {
+                              const newSettings = {
+                                ...convergeSettings,
+                                recentBuildingUpns: AddRecentBuildings(
+                                  convergeSettings?.recentBuildingUpns,
+                                  place.locality,
+                                ),
+                              };
+                              setConvergeSettings(newSettings);
+                              createReservation(calendarEvent);
+                              return meService.updateMyPredictedLocation({
+                                year: dayjs.utc(startDate).year(),
+                                month: dayjs.utc(startDate).month() + 1,
+                                day: dayjs.utc(startDate).date(),
+                                userPredictedLocation: {
+                                  campusUpn: place.locality,
+                                },
+                              });
+                            })
+                            .then(() => {
+                              clearPlaceCard();
+                              setOpen(false);
+                              getAvailability();
+                              loadUpcomingReservations(
+                                state.upcomingReservationsStartDate,
+                                state.upcomingReservationsEndDate,
+                              );
+                              Notifications.show({
+                                duration: 5000,
+                                title: "You reserved a workspace.",
+                                content: `${place?.displayName} (${dayjs(startDate).format("ddd @ h:mm A")})`,
+                              });
+                            })
+                            .catch(() => {
+                              setErr("Something went wrong with your workspace reservation. Please try again.");
+                            })
+                            .finally(() => {
+                              setLoading(false);
+                            });
+                        }
+                      }}
+                      confirmButton={{
+                        content: isWorkspace ? "Reserve" : "Create event",
+                        disabled: !bookable,
+                        loading,
+                      }}
+                      cancelButton="Cancel"
+                      content={(
+                        <BookPlaceModal
+                          place={place}
+                          bookable={bookable}
+                          setBookable={setBookable}
+                          buildingName={buildingName}
+                          err={err}
+                          start={start}
+                          end={end}
+                          setStart={setStart}
+                          setEnd={setEnd}
+                          isAllDay={isAllDay}
+                          setIsAllDay={setIsAllDay}
+                          isFlexible={isFlexibleSeating}
+                        />
+                      )}
+                      header={(
+                        <Text
+                          as="h2"
+                          content={`Book a ${isWorkspace ? "workspace" : "meeting room"}`}
+                          styles={{ fontSize: "18px", color: "#252525", fontWeight: "normal" }}
+                          className={classes.lightTheme}
+                        />
+                      )}
+                      headerAction={{
+                        icon: <CloseIcon />,
+                        title: "Close",
+                        onClick: () => {
+                          clearPlaceCard();
+                          logEvent(USER_INTERACTION, [
+                            { name: UI_SECTION, value: UISections.BookPlaceModal },
+                            { name: DESCRIPTION, value: "close_modal" },
+                          ]);
+                          setOpen(false);
+                        },
+                      }}
+                      trigger={(
+                        <Button
+                          className={classes.triggerBtn}
+                          loading={availabilityLoading}
+                          content={(
+                            <>
+                              {!availabilityLoading && isWorkspace && `${availability} available`}
+                              {(!availabilityLoading && !isWorkspace) && `${!isAvailable ? "Unavailable" : "Available"}`}
+                            </>
+                          )}
+                        />
+                      )}
+                      className={classes.dialog}
+                    />
+                    <NewConfRoomEvent
+                      open={newEventDialogOpen}
+                      setOpen={setNewEventDialogOpen}
+                      place={place}
+                      start={start}
+                      end={end}
+                      setStart={setStart}
+                      setEnd={setEnd}
+                      clearPlaceCard={clearPlaceCard}
+                      getAvailability={getAvailability}
+                    />
+                  </>
+                </Provider>
+              </Box>
+            </Flex>
+          </Box>
+        </>
+      ) : null}
     </>
   );
 };
