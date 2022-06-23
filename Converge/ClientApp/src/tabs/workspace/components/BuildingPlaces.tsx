@@ -52,7 +52,7 @@ const BuildingPlaces: React.FC<IPlaceResultSetProps> = ({
   const pageSizeOptions = [
     10, 15, 25, 50,
   ];
-  const [itemsPerPage, setItemsPerPage] = useState<number>(pageSizeOptions[0]);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(pageSizeOptions[2]);
   const [count, setCount] = useState<number>(0);
   const [skipTokenString, setSkipTokenString] = useState<string>(skipToken);
   const handleItemCountChange = (
