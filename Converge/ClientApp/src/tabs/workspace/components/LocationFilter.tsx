@@ -45,7 +45,7 @@ const LocationFilter: React.FC<Props> = (props) => {
         Location
       </FormLabel>
       <PopupMenuWrapper
-        // headerTitle="Recent buildings"
+        headerTitle="Recent buildings"
         handleDropdownChange={handleDropdownChange}
         buildingList={buildings.map((b) => b.displayName)}
         locationBuildingName=""

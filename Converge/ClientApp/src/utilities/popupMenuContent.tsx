@@ -14,7 +14,7 @@ import {
 } from "../types/LoggerTypes";
 
 interface Props {
-  headerTitle?: string,
+  headerTitle: string,
   locationBuildingName: string | undefined;
   otherOptionsList: string[];
   buildingList: ShorthandCollection<DropdownItemProps, Record<string, unknown>>;
@@ -97,8 +97,8 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
             </>
           </Box>
         )}
-      {/* {location.pathname === "/workspace" && recentBuildingsLoading && <Loader />} */}
-      {/* {location.pathname === "/workspace" && state.recentBuildings.length > 0
+      {location.pathname === "/workspace" && recentBuildingsLoading && <Loader />}
+      {location.pathname === "/workspace" && state.recentBuildings.length > 0
         && (
           <Box>
             {state.recentBuildings.map((item) => (
@@ -126,8 +126,7 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
                       title={item?.displayName}
                       weight="semilight"
                       styles={{
-                        whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",
-                        marginLeft: "0.6rem", marginTop: "1rem",
+                        whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden", marginLeft: "0.6rem", marginTop: "1rem",
                       }}
                     />
                   </Button>
@@ -135,7 +134,7 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
               </>
             ))}
           </Box>
-        )} */}
+        )}
       {location.pathname !== "/workspace" && otherOptionsList.length > 0
         && (
           <Box>
@@ -173,7 +172,7 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
             ))}
           </Box>
         )}
-      {/* <Divider className="filter-popup-menu-divider" styles={{ marginTop: "0.4rem" }} /> */}
+      <Divider className="filter-popup-menu-divider" styles={{ marginTop: "0.4rem" }} />
       <Box className={classes.WorkSpacebuildingContent} styles={{ maxHeight }}>
         <Box>
           <Flex gap="gap.small" vAlign="center">
@@ -218,10 +217,10 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
             </Box>
           )}
       </Box>
-      {/* {state.clickBuildingListLoading && <Loader label={state.buildingsLoadingMessage} />} */}
-      {/* <Divider className="filter-popup-menu-divider" styles={{ marginTop: "0.4rem" }} /> */}
+      {state.clickBuildingListLoading && <Loader label={state.buildingsLoadingMessage} />}
+      <Divider className="filter-popup-menu-divider" styles={{ marginTop: "0.4rem" }} />
       <Flex gap="gap.small" vAlign="center" hAlign="start" styles={{ marginBottom: "1.5%" }}>
-        {/* <Button
+        <Button
           text
           content={buttonTitle}
           onClick={() => {
@@ -239,7 +238,7 @@ const PopupMenuContent: React.FunctionComponent<Props> = (props) => {
           }}
           disabled={state.buildingsByRadiusDistance >= 4000}
           styles={{ color: "#464775" }}
-        /> */}
+        />
       </Flex>
     </Provider>
   );
