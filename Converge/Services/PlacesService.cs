@@ -161,16 +161,16 @@ namespace Converge.Services
 
         public async Task<List<ExchangePlacePhoto>> GetPlacePhotos(string placeSharePointID)
         {
-            List<ExchangePlacePhoto> result = cacheSharePointContentService.GetExchangePlacePhotoUrlsFromCache(placeSharePointID);
-            if (result != null)
-            {
-                return result;
-            }
+            // List<ExchangePlacePhoto> result = cacheSharePointContentService.GetExchangePlacePhotoUrlsFromCache(placeSharePointID);
+            // if (result != null)
+            // {
+            //     return result;
+            // }
             string sharePointSiteId = configuration["SharePointSiteId"];
             string sharePointPhotoListId = configuration["SharePointPhotoListId"];
             List photosList = await appGraphService.GetList(sharePointSiteId, sharePointPhotoListId);
 
-            result = new List<ExchangePlacePhoto>();
+            List<ExchangePlacePhoto> result = new List<ExchangePlacePhoto>();
             if (photosList != null)
             {
                 List<ListItem> photoItems = await appGraphService.GetPhotoItems(sharePointSiteId, photosList.Id, placeSharePointID);
@@ -199,7 +199,7 @@ namespace Converge.Services
                 }
             }
 
-            cacheSharePointContentService.AddExchangePlacePhotoUrlsToCache(placeSharePointID, result);
+            // cacheSharePointContentService.AddExchangePlacePhotoUrlsToCache(placeSharePointID, result);
             return result;
         }
     }
