@@ -92,6 +92,10 @@ namespace Converge.Models
         /// </summary>
         public virtual string Locality { get; set; }
 
+        public virtual bool FullyEnclosed { get; set; }
+        public virtual bool SurfaceHub { get; set; }
+        public virtual bool WhiteboardCamera { get; set; }
+
         /// <summary>
         /// A constructor that creates a graph place from the place object received from the C# Graph library.
         /// </summary>
@@ -125,6 +129,9 @@ namespace Converge.Models
                     break;
             }
             IsWheelChairAccessible = DeserializeAdditionalData.GetBoolProperty(place.AdditionalData, "isWheelChairAccessible");
+            FullyEnclosed = DeserializeAdditionalData.GetBoolProperty(place.AdditionalData, "surfaceHub");
+            SurfaceHub = DeserializeAdditionalData.GetBoolProperty(place.AdditionalData, "fullyEnclosed");
+            WhiteboardCamera = DeserializeAdditionalData.GetBoolProperty(place.AdditionalData, "whiteboardCamera");
             AudioDeviceName = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "audioDeviceName");
             VideoDeviceName = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "videoDeviceName");
             DisplayDeviceName = DeserializeAdditionalData.GetStringProperty(place.AdditionalData, "displayDeviceName");

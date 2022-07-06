@@ -624,17 +624,17 @@ namespace Converge.Services
 
                 if (listItemFilterOptions.FullyEnclosed)
                 {
-                    predicateBuilder.Append("and (fields/FullyEnclosed eq 0)");
+                    predicateBuilder.Append(" and (fields/FullyEnclosed eq 1)");
                 }
 
                 if (listItemFilterOptions.SurfaceHub)
                 {
-                    predicateBuilder.Append("and (fields/SurfaceHub eq 0)");
+                    predicateBuilder.Append(" and (fields/SurfaceHub eq 1)");
                 }
 
                 if (listItemFilterOptions.WhiteboardCamera)
                 {
-                    predicateBuilder.Append("and (fields/WhiteboardCamera eq 0)");
+                    predicateBuilder.Append(" and (fields/WhiteboardCamera eq 1)");
                 }
             }
 
