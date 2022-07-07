@@ -108,7 +108,7 @@ const FeatureFilter: React.FC = () => {
       return;
     }
     let attributeFilter: PlaceAttributeKeys[] = [];
-    if (["audioDeviceName", "displayDeviceName", "videoDeviceName", "isWheelChairAccessible", "fullyEnclosed", "display", "surfaceHub", "whiteboardCamera"]
+    if (["audioDeviceName", "displayDeviceName", "videoDeviceName", "isWheelChairAccessible", "fullyEnclosed", "surfaceHub", "whiteboardCamera"]
       .indexOf(option.key as string) > -1) {
       attributeFilter = option.selected
         ? [...state.attributeFilter, option.key as PlaceAttributeKeys]
