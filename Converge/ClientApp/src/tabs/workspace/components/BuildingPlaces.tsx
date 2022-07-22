@@ -75,7 +75,7 @@ const BuildingPlaces: React.FC<IPlaceResultSetProps> = ({
         surfaceHub: state.attributeFilter.indexOf("surfaceHub") > -1,
         whiteboardCamera: state.attributeFilter.indexOf("whiteboardCamera") > -1,
       },
-      skipTokenString,
+      null,
       true,
     ).then((s) => {
       setCount(s.exchangePlacesList.length);
