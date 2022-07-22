@@ -169,8 +169,8 @@ namespace Converge.Services
             string sharePointSiteId = configuration["SharePointSiteId"];
             string sharePointPhotoListId = configuration["SharePointPhotoListId"];
             List photosList = await appGraphService.GetList(sharePointSiteId, sharePointPhotoListId);
-
-            // List<ExchangePlacePhoto> result = new List<ExchangePlacePhoto>();
+            
+            result = new List<ExchangePlacePhoto>();
             if (photosList != null)
             {
                 List<ListItem> photoItems = await appGraphService.GetPhotoItems(sharePointSiteId, photosList.Id, placeSharePointID);
