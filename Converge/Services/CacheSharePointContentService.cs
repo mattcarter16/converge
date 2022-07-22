@@ -32,10 +32,11 @@ namespace Converge.Services
         {
             // Structurally, similar idea based on CachePlacesProviderService
             // CacheSharePointContentService will be existing regardless of appsettings configuration.
+            // reduced from 24 to 16 as it appears that SharePoint document token expires 24 hours 
 
             return new MemoryCacheEntryOptions()
                         .SetPriority(CacheItemPriority.Normal)
-                        .SetSlidingExpiration(TimeSpan.FromHours(24));
+                        .SetSlidingExpiration(TimeSpan.FromHours(16));
         }
 
         private string GetContentKeyAndString(SharePointContentType? contentType, out string contentTypeString)
