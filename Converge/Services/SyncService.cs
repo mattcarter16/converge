@@ -182,7 +182,7 @@ namespace Converge.Services
             // }
             if ((graphPlace.Tags != null && exchangePlace.Tags is null) && (graphPlace.Tags.Count > 0))
             {
-                additionalData.Add("FullyEnclosed", graphPlace.Tags.Contains("Fully Encolsed") ? "True" : "False");
+                additionalData.Add("FullyEnclosed", graphPlace.Tags.Contains("Fully Enclosed") ? "True" : "False");
                 additionalData.Add("SurfaceHub", graphPlace.Tags.Contains("Surface Hub") ? "True" : "False");
                 additionalData.Add("WhiteboardCamera", graphPlace.Tags.Contains("Whiteboard Camera") ? "True" : "False");
             }
@@ -192,7 +192,7 @@ namespace Converge.Services
             // }
             if (graphPlace.Tags != null && exchangePlace.Tags != null && string.Join("", graphPlace.Tags) != string.Join("", exchangePlace.Tags))
             {
-                additionalData.Add("FullyEnclosed", graphPlace.Tags.Contains("Fully Encolsed") ? "True" : "False");
+                additionalData.Add("FullyEnclosed", graphPlace.Tags.Contains("Fully Enclosed") ? "True" : "False");
                 additionalData.Add("SurfaceHub", graphPlace.Tags.Contains("Surface Hub") ? "True" : "False");
                 additionalData.Add("WhiteboardCamera", graphPlace.Tags.Contains("Whiteboard Camera") ? "True" : "False");
             }
