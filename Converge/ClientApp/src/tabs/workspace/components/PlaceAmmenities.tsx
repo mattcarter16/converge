@@ -40,9 +40,10 @@ export const getAmmenities = (place: ExchangePlace): string[] => {
     { key: "displayDeviceName", value: "Display" },
     { key: "videoDeviceName", value: "Video" },
     { key: "isWheelChairAccessible", value: "Accessible" },
-    { key: "fullyEnclosed", value: "Fully Enclosed" },
-    { key: "surfaceHub", value: "Surface Hub" },
-    { key: "whiteboardCamera", value: "Whiteboard Camera" },
+    // don't need these scince it is part of place.tags loaded below
+    // { key: "fullyEnclosed", value: "Fully Enclosed" },
+    // { key: "surfaceHub", value: "Surface Hub" },
+    // { key: "whiteboardCamera", value: "Whiteboard Camera" },
   ]
     .filter((k) => !!place[k.key as PlaceAttributeKeys])
     .map((k) => k.value);
