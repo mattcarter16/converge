@@ -36,7 +36,7 @@ namespace Converge.Services
 
             return new MemoryCacheEntryOptions()
                         .SetPriority(CacheItemPriority.Normal)
-                        .SetSlidingExpiration(TimeSpan.FromHours(16));
+                        .SetSlidingExpiration(TimeSpan.FromHours(11));
         }
 
         private string GetContentKeyAndString(SharePointContentType? contentType, out string contentTypeString)
