@@ -152,10 +152,10 @@ namespace Converge.Services
             foreach (Event e in filteredEventsList)
             {
                 telemetryService.TrackEvent("Get locations from event", "event", e);
-                if (e.Locations?.Count() > 0)
-                {
-                    var eventLocations = e.Locations.Where(x => placesDictionary.ContainsKey(x.LocationUri));
-                    
+                // if (e.Locations?.Count() > 0)
+                // {
+                    var eventLocations = e.Locations.Where(x => (x != null || placesDictionary.ContainsKey(x.LocationUri)));
+
                     foreach (Location location in eventLocations)
                     {
                         telemetryService.TrackEvent("For each location get uri", "location", location);
@@ -181,7 +181,7 @@ namespace Converge.Services
                         }
                         locations[normalizedLocation.DisplayName] = normalizedLocation;
                     }
-                }
+                // }
             }
 
             if (topLocation != null)
