@@ -22,7 +22,7 @@ namespace Converge.Services
 
         public PredictionService(IConfiguration configuration,
                                     TelemetryService telemetryService,
-                                    AppGraphService appGraphService, 
+                                    AppGraphService appGraphService,
                                     BuildingsMonoService buildingsMonoSvc)
         {
             this.configuration = configuration;
@@ -44,7 +44,7 @@ namespace Converge.Services
             {
                 return;
             }
-            
+
             await CollectPlacesFromEvents(eventsList, placesDictionary);
 
             List<DateTimeLimit> predictionWindowList = new List<DateTimeLimit>();
@@ -152,31 +152,35 @@ namespace Converge.Services
             foreach (Event e in filteredEventsList)
             {
                 telemetryService.TrackEvent("Get locations from event", "event", e);
-                var eventLocations = e.Locations?.Count() > 0 ? e.Locations.Where(x => placesDictionary.ContainsKey(x.LocationUri)) : null;
-                foreach (Location location in eventLocations)
+                if (e.Locations?.Count() > 0)
                 {
-                    telemetryService.TrackEvent("For each location get uri", "location", location);
-                    ExchangePlace place = location != null ? placesDictionary[location.LocationUri] : null;
-                    if (place == null)
+                    var eventLocations = e.Locations.Where(x => placesDictionary.ContainsKey(x.LocationUri));
+                    
+                    foreach (Location location in eventLocations)
                     {
-                        continue;
+                        telemetryService.TrackEvent("For each location get uri", "location", location);
+                        ExchangePlace place = placesDictionary[location.LocationUri];
+                        if (place == null)
+                        {
+                            continue;
+                        }
+                        Location normalizedLocation = NormalizeLocation(place);
+                        if (place.Type == PlaceType.Space)
+                        {
+                            topLocation = normalizedLocation;
+                            lastWorkspaceBookingModified = e.LastModifiedDateTime;
+                            break;
+                        }
+                        if (locationCount.ContainsKey(normalizedLocation.DisplayName))
+                        {
+                            locationCount[normalizedLocation.DisplayName] += 1;
+                        }
+                        else
+                        {
+                            locationCount[normalizedLocation.DisplayName] = 1;
+                        }
+                        locations[normalizedLocation.DisplayName] = normalizedLocation;
                     }
-                    Location normalizedLocation = NormalizeLocation(place);
-                    if (place.Type == PlaceType.Space)
-                    {
-                        topLocation = normalizedLocation;
-                        lastWorkspaceBookingModified = e.LastModifiedDateTime;
-                        break;
-                    }
-                    if (locationCount.ContainsKey(normalizedLocation.DisplayName))
-                    {
-                        locationCount[normalizedLocation.DisplayName] += 1;
-                    }
-                    else
-                    {
-                        locationCount[normalizedLocation.DisplayName] = 1;
-                    }
-                    locations[normalizedLocation.DisplayName] = normalizedLocation;
                 }
             }
 
@@ -224,7 +228,7 @@ namespace Converge.Services
             if (prediction != null)
             {
                 bool isSavedPredictionUserSet = prediction.SingleValueExtendedProperties?
-                                                .Any(svep => svep.Id == appGraphService.ConvergePredictionSetByUser && svep.Value == "true" ) ?? false;
+                                                .Any(svep => svep.Id == appGraphService.ConvergePredictionSetByUser && svep.Value == "true") ?? false;
                 bool isWorkspaceBookingMostRecent = false;
                 if (lastWorkspaceBookingModified != null)
                 {
@@ -290,7 +294,7 @@ namespace Converge.Services
         {
             return new Location
             {
-                DisplayName = place.Building?? place.DisplayName,
+                DisplayName = place.Building ?? place.DisplayName,
                 Address = new PhysicalAddress
                 {
                     Street = place.Street,
@@ -320,7 +324,7 @@ namespace Converge.Services
                     location = new Location()
                     {
                         LocationUri = userPredictedLocation.CampusUpn,
-                        DisplayName = place.Building?? place.DisplayName,
+                        DisplayName = place.Building ?? place.DisplayName,
                         Address = new PhysicalAddress
                         {
                             Street = place.Street,
@@ -345,7 +349,7 @@ namespace Converge.Services
                 };
             }
 
-            if(location == null)
+            if (location == null)
             {
                 return false;
             }
