@@ -196,7 +196,7 @@ namespace Converge.Services
         public virtual async Task<List<GraphPlace>> GetAllWorkspaces(string roomListEmailAddress)
         {
             List<GraphPlace> result = new List<GraphPlace>();
-            var workspaces = await new GraphServicePlacesCollectionRequestBuilder($"https://graph.microsoft.com/beta/places/{roomListEmailAddress}/microsoft.graph.roomlist/spaces", appGraphServiceClient)
+            var workspaces = await new GraphServicePlacesCollectionRequestBuilder($"https://graph.microsoft.com/beta/places/{roomListEmailAddress}/microsoft.graph.roomlist/workspaces", appGraphServiceClient)
                 .Request()
                 .GetAsync();
 
