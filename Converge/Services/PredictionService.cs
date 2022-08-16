@@ -153,10 +153,10 @@ namespace Converge.Services
             {                
                 if (e.Locations?.Count() > 0)                
                 {
-                    telemetryService.TrackEvent("Get event details", "eventDetails", e);
+                    // telemetryService.TrackEvent("Get event details", "eventDetails", e);
                     telemetryService.TrackEvent("Get locations from event", "locations", e.Locations);
                     // Need to account for Teams Meetings as they will not have a LocationUri
-                    var eventLocations = e.Locations.Where(x => x.DisplayName != "Microsoft Teams Meeting" && placesDictionary.ContainsKey(x.LocationUri));
+                    var eventLocations = e.Locations.Where(x => x.LocationUri != null && x.DisplayName != "Microsoft Teams Meeting" && placesDictionary.ContainsKey(x.LocationUri));
                     telemetryService.TrackEvent("Filter for events with locationUri", "eventLocations", eventLocations);
                     foreach (Location location in eventLocations)
                     {
