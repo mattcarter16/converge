@@ -268,7 +268,8 @@ namespace Converge.Services
             {
                 if (location == null)
                 {
-                    return;
+                    telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
+                    await appGraphService.DeleteEvent(id, prediction.Id);
                 }
                 Event ev = new Event
                 {
