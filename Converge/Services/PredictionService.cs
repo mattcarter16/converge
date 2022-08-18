@@ -226,6 +226,7 @@ namespace Converge.Services
             DateTime startDateTime = new DateTime(start.Year, start.Month, start.Day);
             DateTime endDateTime = startDateTime.AddHours(24);
             Event prediction = await appGraphService.GetConvergePrediction(id, convergeCalendar.Id, start.Year, start.Month, start.Day);
+            telemetryService.TrackEvent("Get Converge Prediction", "prediction", prediction);
             if (prediction != null)
             {
                 bool isSavedPredictionUserSet = prediction.SingleValueExtendedProperties?
@@ -235,7 +236,9 @@ namespace Converge.Services
                 {
                     isWorkspaceBookingMostRecent = lastWorkspaceBookingModified > prediction.LastModifiedDateTime;
                 }
-
+                telemetryService.TrackEvent("Check one", "isSavedPredictionUserSet", isSavedPredictionUserSet);
+                telemetryService.TrackEvent("Check two", "isPredictionUserSet", isPredictionUserSet);
+                telemetryService.TrackEvent("Check three", "isWorkspaceBookingMostRecent", isWorkspaceBookingMostRecent);
                 if (!isSavedPredictionUserSet || isPredictionUserSet || isWorkspaceBookingMostRecent)
                 {
                     if (location == null)
