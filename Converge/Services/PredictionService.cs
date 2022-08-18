@@ -263,13 +263,18 @@ namespace Converge.Services
                         await appGraphService.UpdateEvent(id, prediction);
                     }
                 }
+                else {
+                    if (location == null) {
+                        telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
+                        await appGraphService.DeleteEvent(id, prediction.Id);
+                    }
+                }
             }
             else
             {
                 if (location == null)
                 {
-                    telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
-                    await appGraphService.DeleteEvent(id, prediction.Id);
+                    return;
                 }
                 Event ev = new Event
                 {
