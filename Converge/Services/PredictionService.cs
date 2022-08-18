@@ -48,7 +48,6 @@ namespace Converge.Services
             await CollectPlacesFromEvents(eventsList, placesDictionary);
 
             List<DateTimeLimit> predictionWindowList = new List<DateTimeLimit>();
-            telemetryService.TrackEvent("Get MaxPredictionWindow", "MaxPredictionWindow", MaxPredictionWindow);
             for (int i = 0; i < MaxPredictionWindow; i++)
             {
                 DateTime startDateTime = DateTime.Today.ToUniversalTime().AddDays(i);
@@ -64,7 +63,6 @@ namespace Converge.Services
                 }
                 DateTimeLimit predictionWindow = new DateTimeLimit(startDateTime, endDateTime, workingHours.TimeZone.Name);
                 predictionWindowList.Add(predictionWindow);
-                telemetryService.TrackEvent("Get prediction window list", "predictionWindowList", predictionWindowList);
             }
 
             object locker = new object();
@@ -228,9 +226,9 @@ namespace Converge.Services
             DateTime startDateTime = new DateTime(start.Year, start.Month, start.Day);
             DateTime endDateTime = startDateTime.AddHours(24);
             Event prediction = await appGraphService.GetConvergePrediction(id, convergeCalendar.Id, start.Year, start.Month, start.Day);
-            telemetryService.TrackEvent("Get Converge Prediction", "prediction", prediction);
             if (prediction != null)
             {
+                telemetryService.TrackEvent("Get Converge Prediction", "prediction", prediction);
                 bool isSavedPredictionUserSet = prediction.SingleValueExtendedProperties?
                                                 .Any(svep => svep.Id == appGraphService.ConvergePredictionSetByUser && svep.Value == "true") ?? false;
                 bool isWorkspaceBookingMostRecent = false;
