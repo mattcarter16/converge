@@ -40,6 +40,7 @@ namespace Converge.Services
             today = today.Initialize(new TimeOfDay(0, 0, 0));
 
             List<Event> eventsList = await GetAllEventsList(userId, today, today.AddDays(MaxPredictionWindow));
+            telemetryService.TrackEvent("Get all events", userId + ": ", eventsList);
             if (eventsList == null || eventsList.Count == 0 || eventsList.All(e => e.Locations == null && e.Location == null))
             {
                 return;
