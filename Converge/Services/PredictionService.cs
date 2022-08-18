@@ -239,10 +239,12 @@ namespace Converge.Services
                 telemetryService.TrackEvent("Check one", "isSavedPredictionUserSet", isSavedPredictionUserSet);
                 telemetryService.TrackEvent("Check two", "isPredictionUserSet", isPredictionUserSet);
                 telemetryService.TrackEvent("Check three", "isWorkspaceBookingMostRecent", isWorkspaceBookingMostRecent);
+                telemetryService.TrackEvent("Check four", "location", location);
                 if (!isSavedPredictionUserSet || isPredictionUserSet || isWorkspaceBookingMostRecent)
                 {
                     if (location == null)
                     {
+                        telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
                         await appGraphService.DeleteEvent(id, prediction.Id);
                     }
                     else
@@ -257,6 +259,7 @@ namespace Converge.Services
                                 Value = isPredictionUserSet ? "true" : "false",
                             }
                         };
+                        telemetryService.TrackEvent("Update prediction event", "prediction", prediction);
                         await appGraphService.UpdateEvent(id, prediction);
                     }
                 }
@@ -290,6 +293,7 @@ namespace Converge.Services
                     Location = location,
                     Locations = new List<Location> { location },
                 };
+                telemetryService.TrackEvent("Create prediction event", "ev", ev);
                 await appGraphService.CreateConvergePrediction(id, convergeCalendar.Id, ev, isPredictionUserSet);
             }
         }
