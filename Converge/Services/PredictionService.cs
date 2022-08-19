@@ -74,7 +74,7 @@ namespace Converge.Services
                     var start = predictionWindowList[i].Start;
                     var end = predictionWindowList[i].End;
                     Location predictedLocation = GetPredictedLocation(start, end, eventsList, placesDictionary, out DateTimeOffset? lastWorkspaceBookingModified);
-                    telemetryService.TrackEvent("Get predicted location" + userId, "predictedLocation", predictedLocation);
+                    telemetryService.TrackEvent("Get predicted location", "predictedLocation: " + userId, predictedLocation);
                     await CreateOrUpdatePrediction(userId, predictedLocation, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name), false, lastWorkspaceBookingModified);
                 }
                 catch (Exception e)
@@ -242,14 +242,14 @@ namespace Converge.Services
                 telemetryService.TrackEvent("Check two", "isPredictionUserSet", isPredictionUserSet);
                 telemetryService.TrackEvent("Check three", "isWorkspaceBookingMostRecent", isWorkspaceBookingMostRecent);
                 telemetryService.TrackEvent("Check four", "location", location);
+                if (location == null)
+                {
+                    telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
+                    await appGraphService.DeleteEvent(id, prediction.Id);
+                }
                 if (!isSavedPredictionUserSet || isPredictionUserSet || isWorkspaceBookingMostRecent)
                 {
-                    if (location == null)
-                    {
-                        telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
-                        await appGraphService.DeleteEvent(id, prediction.Id);
-                    }
-                    else
+                    if (location != null)
                     {
                         prediction.Location = location;
                         prediction.Locations = new List<Location> { location };
@@ -263,12 +263,6 @@ namespace Converge.Services
                         };
                         telemetryService.TrackEvent("Update prediction event", "prediction", prediction);
                         await appGraphService.UpdateEvent(id, prediction);
-                    }
-                }
-                else {
-                    if (location == null) {
-                        telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
-                        await appGraphService.DeleteEvent(id, prediction.Id);
                     }
                 }
             }
