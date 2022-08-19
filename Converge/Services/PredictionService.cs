@@ -40,7 +40,7 @@ namespace Converge.Services
             today = today.Initialize(new TimeOfDay(0, 0, 0));
 
             List<Event> eventsList = await GetAllEventsList(userId, today, today.AddDays(MaxPredictionWindow));
-            telemetryService.TrackEvent("Get all events", userId + ": ", eventsList);
+            // telemetryService.TrackEvent("Get all events", userId + ": ", eventsList);
             if (eventsList == null || eventsList.Count == 0 || eventsList.All(e => e.Locations == null && e.Location == null))
             {
                 return;
@@ -74,6 +74,7 @@ namespace Converge.Services
                     var start = predictionWindowList[i].Start;
                     var end = predictionWindowList[i].End;
                     Location predictedLocation = GetPredictedLocation(start, end, eventsList, placesDictionary, out DateTimeOffset? lastWorkspaceBookingModified);
+                    telemetryService.TrackEvent("Get predicted location", "predictedLocation", predictedLocation);
                     await CreateOrUpdatePrediction(userId, predictedLocation, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name), false, lastWorkspaceBookingModified);
                 }
                 catch (Exception e)
@@ -160,7 +161,7 @@ namespace Converge.Services
                     // telemetryService.TrackEvent("Filter for events with locationUri", "eventLocations", eventLocations);
                     foreach (Location location in eventLocations)
                     {
-                        telemetryService.TrackEvent("For each location get uri", "location", location);
+                        // telemetryService.TrackEvent("For each location get uri", "location", location);
                         ExchangePlace place = placesDictionary[location.LocationUri];
                         if (place == null)
                         {
