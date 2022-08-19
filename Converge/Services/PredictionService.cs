@@ -74,7 +74,7 @@ namespace Converge.Services
                     var start = predictionWindowList[i].Start;
                     var end = predictionWindowList[i].End;
                     Location predictedLocation = GetPredictedLocation(start, end, eventsList, placesDictionary, out DateTimeOffset? lastWorkspaceBookingModified);
-                    telemetryService.TrackEvent("Get predicted location", "predictedLocation", predictedLocation);
+                    telemetryService.TrackEvent("Get predicted location" + userId, "predictedLocation", predictedLocation);
                     await CreateOrUpdatePrediction(userId, predictedLocation, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name), false, lastWorkspaceBookingModified);
                 }
                 catch (Exception e)
