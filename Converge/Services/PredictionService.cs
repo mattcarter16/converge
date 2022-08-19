@@ -232,26 +232,21 @@ namespace Converge.Services
             Event prediction = await appGraphService.GetConvergePrediction(id, convergeCalendar.Id, start.Year, start.Month, start.Day);
             if (prediction != null)
             {
-                telemetryService.TrackEvent("Get Converge Prediction", "prediction", prediction);
                 bool isSavedPredictionUserSet = prediction.SingleValueExtendedProperties?
-                                                .Any(svep => svep.Id == appGraphService.ConvergePredictionSetByUser && svep.Value == "true") ?? false;
+                                                .Any(svep => svep.Id == appGraphService.ConvergePredictionSetByUser && svep.Value == "true" ) ?? false;
                 bool isWorkspaceBookingMostRecent = false;
                 if (lastWorkspaceBookingModified != null)
                 {
                     isWorkspaceBookingMostRecent = lastWorkspaceBookingModified > prediction.LastModifiedDateTime;
                 }
-                telemetryService.TrackEvent("Check one", "isSavedPredictionUserSet", isSavedPredictionUserSet);
-                telemetryService.TrackEvent("Check two", "isPredictionUserSet", isPredictionUserSet);
-                telemetryService.TrackEvent("Check three", "isWorkspaceBookingMostRecent", isWorkspaceBookingMostRecent);
-                telemetryService.TrackEvent("Check four", "location", location);
-                if (location == null)
-                {
-                    telemetryService.TrackEvent("Delete prediction event", "prediction", prediction);
-                    await appGraphService.DeleteEvent(id, prediction.Id);
-                }
+
                 if (!isSavedPredictionUserSet || isPredictionUserSet || isWorkspaceBookingMostRecent)
                 {
-                    if (location != null)
+                    if (location == null)
+                    {
+                        await appGraphService.DeleteEvent(id, prediction.Id);
+                    }
+                    else
                     {
                         prediction.Location = location;
                         prediction.Locations = new List<Location> { location };
@@ -263,7 +258,6 @@ namespace Converge.Services
                                 Value = isPredictionUserSet ? "true" : "false",
                             }
                         };
-                        telemetryService.TrackEvent("Update prediction event", "prediction", prediction);
                         await appGraphService.UpdateEvent(id, prediction);
                     }
                 }
@@ -297,7 +291,6 @@ namespace Converge.Services
                     Location = location,
                     Locations = new List<Location> { location },
                 };
-                telemetryService.TrackEvent("Create prediction event", "ev", ev);
                 await appGraphService.CreateConvergePrediction(id, convergeCalendar.Id, ev, isPredictionUserSet);
             }
         }
