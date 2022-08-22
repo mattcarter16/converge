@@ -249,9 +249,9 @@ const PlaceCard: React.FC<Props> = (props) => {
                               setConvergeSettings(newSettings);
                               createReservation(calendarEvent);
                               return meService.updateMyPredictedLocation({
-                                year: dayjs.utc(startDate).year(),
-                                month: dayjs.utc(startDate).month() + 1,
-                                day: dayjs.utc(startDate).date(),
+                                year: dayjs(startDate).year(),
+                                month: dayjs(startDate).month() + 1,
+                                day: dayjs(startDate).date(),
                                 userPredictedLocation: {
                                   campusUpn: place.locality,
                                 },
