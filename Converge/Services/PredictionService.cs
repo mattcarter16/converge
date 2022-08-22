@@ -75,7 +75,7 @@ namespace Converge.Services
                     var end = predictionWindowList[i].End;
                     Location predictedLocation = GetPredictedLocation(start, end, eventsList, placesDictionary, out DateTimeOffset? lastWorkspaceBookingModified);
                     telemetryService.TrackEvent("Get predicted location", "predictedLocation: " + userId, predictedLocation);
-                    telemetryService.TrackEvent("Time check", "TimeZoneInfo", TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name));
+                    telemetryService.TrackEvent("Time check", "Time zone for: " + userId, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name));
                     await CreateOrUpdatePrediction(userId, predictedLocation, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name), false, lastWorkspaceBookingModified);
                 }
                 catch (Exception e)
@@ -259,8 +259,12 @@ namespace Converge.Services
                         };
                         await appGraphService.UpdateEvent(id, prediction);
                     }
+                } 
+                // delete if location is null and prediction not set by user
+                if (isSavedPredictionUserSet && location == null){
+                    await appGraphService.DeleteEvent(id, prediction.Id);
                 }
-            }
+                }
             else
             {
                 if (location == null)
