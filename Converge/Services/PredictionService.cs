@@ -75,6 +75,7 @@ namespace Converge.Services
                     var end = predictionWindowList[i].End;
                     Location predictedLocation = GetPredictedLocation(start, end, eventsList, placesDictionary, out DateTimeOffset? lastWorkspaceBookingModified);
                     telemetryService.TrackEvent("Get predicted location", "predictedLocation: " + userId, predictedLocation);
+                    telemetryService.TrackEvent("Time check", "TimeZoneInfo", TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name));
                     await CreateOrUpdatePrediction(userId, predictedLocation, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, workingHours.TimeZone.Name), false, lastWorkspaceBookingModified);
                 }
                 catch (Exception e)
@@ -153,14 +154,12 @@ namespace Converge.Services
 
             foreach (Event e in filteredEventsList)
             {                
-                if (e.Locations?.Count() > 0)                
-                {
-                    telemetryService.TrackEvent("Get locations from event", "locations", e.Locations);
-                    // Need to account for Teams Meetings as they will not have a LocationUri
-                    // var eventLocations = e.Locations.Where(x => x.LocationUri != null && x.DisplayName != "Microsoft Teams Meeting" && placesDictionary.ContainsKey(x.LocationUri));
+                // if (e.Locations?.Count() > 0)                
+                // {
+                    // telemetryService.TrackEvent("Get locations from event", "locations", e.Locations);
                     var locationsWithUri = e.Locations.Where(x => !string.IsNullOrWhiteSpace(x.LocationUri));
                     var eventLocations = locationsWithUri.Where(y => placesDictionary.ContainsKey(y.LocationUri));
-                    telemetryService.TrackEvent("Filter for events with locationUri", "eventLocations", eventLocations);
+                    // telemetryService.TrackEvent("Filter for events with locationUri", "eventLocations", eventLocations);
                     foreach (Location location in eventLocations)
                     {
                         // telemetryService.TrackEvent("For each location get uri", "location", location);
@@ -185,7 +184,7 @@ namespace Converge.Services
                             locationCount[normalizedLocation.DisplayName] = 1;
                         }
                         locations[normalizedLocation.DisplayName] = normalizedLocation;
-                    }
+                    // }
                 }
             }
 
