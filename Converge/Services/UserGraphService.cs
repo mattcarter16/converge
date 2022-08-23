@@ -638,6 +638,8 @@ namespace Converge.Services
                 OnlineMeetingProvider = OnlineMeetingProviderType.TeamsForBusiness
             };
 
+            telemetryService.TrackEvent("Event details", "Event details", eventRequest);
+
             var eventResponse = await graphServiceClient.Me.Events.Request().AddAsync(eventRequest);
 
             //Log the created request and its details.
