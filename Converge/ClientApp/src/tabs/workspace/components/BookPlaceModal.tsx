@@ -160,9 +160,11 @@ const BookPlaceModal: React.FC<Props> = (props) => {
       if (start.utc().toISOString() <= end.utc().toISOString()) {
         placeService.getPlaceMaxReserved(
           place.identity,
-          dayjs(startDay).utc().toISOString(),
-          dayjs(endDay).utc().toISOString(),
-        ).then(setMaxReserved);
+          start.utc().toISOString(),
+          end.utc().toISOString(),
+        ).then((max) => {
+          setMaxReserved(max);
+        });
       }
     } else if (start.utc().toISOString() <= end.utc().toISOString()) {
       placeService.getRoomAvailability(
@@ -308,7 +310,7 @@ const BookPlaceModal: React.FC<Props> = (props) => {
           <span style={{ fontSize: "14px" }}>
             {isWorkspace && (
               <span>
-                {place.capacity - maxReserved}
+                {(place.capacity - maxReserved) < 1 ? 0 : place.capacity - maxReserved}
                 {" "}
                 seats available
               </span>
