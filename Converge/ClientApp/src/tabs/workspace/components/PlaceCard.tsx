@@ -90,7 +90,7 @@ const PlaceCard: React.FC<Props> = (props) => {
           (state.startDate).utc().toISOString(),
           (state.endDate).utc().toISOString(),
         ).then((maxReserved) => {
-          setAvailability(place.capacity - maxReserved);
+          setAvailability((place.capacity - maxReserved) < 1 ? 0 : place.capacity - maxReserved);
         })
           .finally(() => setAvailabilityLoading(false));
       } else {
