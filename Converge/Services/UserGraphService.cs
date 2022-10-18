@@ -634,9 +634,13 @@ namespace Converge.Services
                     Content = calendarEventRequest.Body
                 },
                 ResponseRequested = true,
-                IsOnlineMeeting = true,
-                OnlineMeetingProvider = OnlineMeetingProviderType.TeamsForBusiness
             };
+
+            // Create Teams meeting if event is not a workspace
+            if (calendarEventRequest.Title != "Converge Workspace Booking") {
+                eventRequest.IsOnlineMeeting = true;
+                eventRequest.OnlineMeetingProvider = OnlineMeetingProviderType.TeamsForBusiness;
+            }
 
             telemetryService.TrackEvent("Event details", "Event details", eventRequest);
 

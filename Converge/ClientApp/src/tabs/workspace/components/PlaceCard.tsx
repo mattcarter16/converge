@@ -235,6 +235,7 @@ const PlaceCard: React.FC<Props> = (props) => {
                               locationEmailAddress: place.identity,
                               locationType: "conferenceRoom",
                             },
+                            // Do not change title. It is used in workspace event creation
                             title: "Converge Workspace Booking",
                             showAs: "free" as MicrosoftGraph.FreeBusyStatus,
                           })
