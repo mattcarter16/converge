@@ -22,8 +22,8 @@ import ImagePlaceholder from "../../../utilities/ImagePlaceholder";
 import PlaceCardStyles from "../styles/PlaceCardStyles";
 import { useApiProvider } from "../../../providers/ApiProvider";
 import { useConvergeSettingsContextProvider } from "../../../providers/ConvergeSettingsProvider";
-import { PlacePhotosResult } from "../../../api/buildingService";
 import AddRecentBuildings from "../../../utilities/RecentBuildingsManager";
+import usePlacePhotos from "../../../hooks/usePlacePhotos";
 
 type Props = {
   place: ExchangePlace,
@@ -36,7 +36,6 @@ const PlaceCard: React.FC<Props> = (props) => {
     calendarService,
     meService,
     placeService,
-    buildingService,
   } = useApiProvider();
   const classes = PlaceCardStyles();
   const {
@@ -57,14 +56,8 @@ const PlaceCard: React.FC<Props> = (props) => {
   const [availability, setAvailability] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
-  const [placePhotos, setPlacePhotos] = useState<PlacePhotosResult | undefined>(undefined);
-
+  const { data: placePhotos } = usePlacePhotos(place.sharePointID);
   const photoUrl = placePhotos?.coverPhoto?.url;
-  useEffect(() => {
-    if (place.sharePointID) {
-      buildingService.getPlacePhotos(place.sharePointID).then(setPlacePhotos);
-    }
-  }, [place.sharePointID]);
 
   useEffect(() => {
     setEnd(state.endDate);

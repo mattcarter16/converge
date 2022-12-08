@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Image, Text, Flex, FlexItem, StarIcon, Box,
 } from "@fluentui/react-northstar";
@@ -15,8 +15,7 @@ import {
 import { useConvergeSettingsContextProvider } from "../../../providers/ConvergeSettingsProvider";
 import CollaborationCampusPlaceCardStyles from "../styles/CollaborationCampusPlaceCardStyles";
 import { logEvent } from "../../../utilities/LogWrapper";
-import { PlacePhotosResult } from "../../../api/buildingService";
-import { useApiProvider } from "../../../providers/ApiProvider";
+import usePlacePhotos from "../../../hooks/usePlacePhotos";
 
 type Props = {
   placeToCollaborate: CampusToCollaborate,
@@ -25,25 +24,16 @@ type Props = {
 
 const CollaborationCampusPlaceCard:React.FC<Props> = (props) => {
   const { placeToCollaborate, onPlaceClick } = props;
-  const { buildingService } = useApiProvider();
   const { convergeSettings } = useConvergeSettingsContextProvider();
   const classes = CollaborationCampusPlaceCardStyles();
   const ammenities = getAmmenities(placeToCollaborate);
-  const [placePhotos, setPlacePhotos] = useState<PlacePhotosResult | undefined>(undefined);
-  const [placePhotosLoading, setPlacePhotosLoading] = useState(false);
-  const [placePhotosError, setPlacePhotosError] = useState(false);
+  const {
+    data: placePhotos,
+    isLoading: placePhotosLoading,
+    isError: placePhotosError,
+  } = usePlacePhotos(placeToCollaborate.sharePointID);
 
   const photoUrl = placePhotos?.coverPhoto?.url;
-
-  useEffect(() => {
-    if (placeToCollaborate.sharePointID) {
-      setPlacePhotosLoading(true);
-      buildingService.getPlacePhotos(placeToCollaborate.sharePointID)
-        .then(setPlacePhotos)
-        .catch(() => setPlacePhotosError(true))
-        .finally(() => setPlacePhotosLoading(false));
-    }
-  }, [placeToCollaborate.sharePointID]);
 
   return (
     <Flex

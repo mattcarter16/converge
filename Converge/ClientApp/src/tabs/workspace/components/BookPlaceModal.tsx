@@ -24,7 +24,7 @@ import PlaceAmmenities from "./PlaceAmmenities";
 import BookPlaceModalStyles from "../styles/BookPlaceModalStyles";
 import { useConvergeSettingsContextProvider } from "../../../providers/ConvergeSettingsProvider";
 import { useApiProvider } from "../../../providers/ApiProvider";
-import { PlacePhotosResult } from "../../../api/buildingService";
+import usePlacePhotos from "../../../hooks/usePlacePhotos";
 
 type Props = {
   place: ExchangePlace,
@@ -59,11 +59,9 @@ const BookPlaceModal: React.FC<Props> = (props) => {
   const {
     meService,
     placeService,
-    buildingService,
   } = useApiProvider();
   const [maxReserved, setMaxReserved] = useState<number>(0);
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
-  const [placePhotos, setPlacePhotos] = useState<PlacePhotosResult | undefined>(undefined);
   const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
   const [floorPlanUrl, setFloorPlanUrl] = useState<string | undefined>(undefined);
   const [otherPhotos, setOtherPhotos] = useState<string[]>([]);
@@ -71,6 +69,7 @@ const BookPlaceModal: React.FC<Props> = (props) => {
   const isWorkspace = place.type === PlaceType.Space;
   const { convergeSettings, setConvergeSettings } = useConvergeSettingsContextProvider();
   const [favoriteCheckBoxLoading, setFavoriteCheckBoxLoading] = useState<boolean>(false);
+  const { data: placePhotos } = usePlacePhotos(place.sharePointID);
 
   const IsFavoritePlace = (placeUpn: string): boolean => {
     if (convergeSettings?.favoriteCampusesToCollaborate?.includes(placeUpn)) {
@@ -150,12 +149,6 @@ const BookPlaceModal: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    let startDay = start.format("MM-DD-YYYY");
-    let endDay = end.format("MM-DD-YYYY");
-    if (isAllDay) {
-      startDay = dayjs(start).format("MM-DD-YYYY");
-      endDay = dayjs(startDay).add(1, "day").format("MM-DD-YYYY");
-    }
     if (place.type === PlaceType.Space) {
       if (start.utc().toISOString() <= end.utc().toISOString()) {
         placeService.getPlaceMaxReserved(
@@ -188,12 +181,6 @@ const BookPlaceModal: React.FC<Props> = (props) => {
       }
     }
   }, [placePhotos]);
-
-  useEffect(() => {
-    if (place.sharePointID) {
-      buildingService.getPlacePhotos(place.sharePointID).then(setPlacePhotos);
-    }
-  }, [place.sharePointID]);
 
   useEffect(() => {
     let isBookable = false;

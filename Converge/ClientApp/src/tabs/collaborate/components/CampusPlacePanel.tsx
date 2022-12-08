@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   Box, Image, Flex, Button, Divider, Text,
 } from "@fluentui/react-northstar";
@@ -19,7 +19,7 @@ import ImagePlaceholder from "../../../utilities/ImagePlaceholder";
 import { useConvergeSettingsContextProvider } from "../../../providers/ConvergeSettingsProvider";
 import CampusPlacePanelStyles from "../styles/CampusPlacePanelStyles";
 import { useApiProvider } from "../../../providers/ApiProvider";
-import { PlacePhotosResult } from "../../../api/buildingService";
+import usePlacePhotos from "../../../hooks/usePlacePhotos";
 
 interface Props {
   setOpen: (open: boolean) => void;
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const CampusPlacePanel: React.FC<Props> = (props) => {
-  const { meService, buildingService } = useApiProvider();
+  const { meService } = useApiProvider();
   const {
     convergeSettings,
     setConvergeSettings,
@@ -39,8 +39,7 @@ const CampusPlacePanel: React.FC<Props> = (props) => {
     place,
   } = props;
   const classes = CampusPlacePanelStyles();
-
-  const [placePhotos, setPlacePhotos] = useState<PlacePhotosResult | undefined>(undefined);
+  const { data: placePhotos } = usePlacePhotos(place.sharePointID);
 
   const images = useMemo<string[]>(() => {
     const img: string[] = [];
@@ -54,13 +53,6 @@ const CampusPlacePanel: React.FC<Props> = (props) => {
     }
     return img;
   }, [placePhotos]);
-
-  useEffect(() => {
-    if (place.sharePointID) {
-      buildingService.getPlacePhotos(place.sharePointID)
-        .then(setPlacePhotos);
-    }
-  }, [place.sharePointID]);
 
   return (
     <Box className={classes.root}>

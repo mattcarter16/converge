@@ -252,10 +252,10 @@ namespace Converge.Services
             var request = await appGraphServiceClient.Sites[siteId].Lists[listId].Items[itemId].DriveItem.Thumbnails.Request().GetAsync();
             List<ThumbnailSet> thumbnails = request.CurrentPage as List<ThumbnailSet>;
             string url = string.Empty;
-            foreach (ThumbnailSet thumbnail in thumbnails)
+            Parallel.ForEach(thumbnails, thumbnail =>
             {
                 url = thumbnail.Large.Url;
-            }
+            });
             return url;
         }
 
