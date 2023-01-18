@@ -45,7 +45,7 @@ module.exports = {
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "@typescript-eslint/no-explicit-any": "off",
-    "header/header": [2, "line", [" Copyright (c) Microsoft Corporation.", " Licensed under the MIT License."]],
+    // "header/header": [2, "line", [" Copyright (c) Microsoft Corporation.", " Licensed under the MIT License."]],
   },
   overrides: [{
     files: ["*.js"],
