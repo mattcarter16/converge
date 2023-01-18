@@ -13,6 +13,7 @@ import {
   NPS_SCORE, UISections, UI_SECTION, USER_INTERACTION,
 } from "../../../types/LoggerTypes";
 import { logEvent } from "../../../utilities/LogWrapper";
+import uid from "../../../utilities/UniqueId";
 import NPSDialogStyles from "../styles/NPSDialogStyles";
 
 // NPS is collected once, 14 days after the user starts to use Converge
@@ -66,6 +67,7 @@ const NPSDialog: React.FC = () => {
           <div className={classes.buttonWrapper}>
             {[1, 2, 3, 4, 5].map((int) => (
               <Button
+                key={uid()}
                 iconOnly
                 icon={(
                   <StarIcon

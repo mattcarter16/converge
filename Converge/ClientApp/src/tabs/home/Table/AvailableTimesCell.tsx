@@ -14,6 +14,7 @@ import {
 import TimeLimit from "../../../types/TimeLimit";
 import createDeepLink from "../../../utilities/deepLink";
 import { logEvent } from "../../../utilities/LogWrapper";
+import uid from "../../../utilities/UniqueId";
 
 interface Props {
   loading: boolean;
@@ -60,6 +61,7 @@ const AvailableTimesCell: React.FC<Props> = (props) => {
     <Flex gap="gap.small" vAlign="center">
       {availableTimes.slice(0, 3).map((at) => (
         <Button
+          key={uid()}
           disabled={disabled}
           size="small"
           content={`${getTimeString(at.start)} - ${getTimeString(at.end)}`}
